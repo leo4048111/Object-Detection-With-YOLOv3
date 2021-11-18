@@ -75,7 +75,7 @@ def inferButtonCallback():
         errorText.grid(row=4, column=0, sticky='w')
         return
 
-    infer(currentImagePath, outputImageDir, openImg)
+    infer(currentImagePath, outputImageDir, openImg, isFilterOn.get())
     out_path = outputImageDir
     out_path += '/' + os.path.splitext(os.path.basename(currentImagePath))[0]+'-result.jpg'
     outputImageStrVal.set(out_path)
@@ -187,7 +187,7 @@ if __name__ == '__main__':
     inferButton.grid(row=4, column=0, sticky='w', pady=1)
 
     ##Init prev/next button
-    npFrame = tk.Frame(controlFrame, width=150)
+    npFrame = tk.Frame(controlFrame)
     npFrame.grid(row=5, column=0)
     prevButton = tk.Button(npFrame,
                            text='Prev',
@@ -202,6 +202,15 @@ if __name__ == '__main__':
                            command=nextCallback)
     nextButton.grid(row=0, column=1, sticky='w')
 
+    ##Init Filter option
+    isFilterOn = tk.IntVar()
+    filterCheckbox = tk.Checkbutton(controlFrame,
+                                    text='Enable Score Filter',
+                                    width=20,
+                                    variable=isFilterOn,
+                                    onvalue=1,
+                                    offvalue=0)
+    filterCheckbox.grid(row=6, column=0, sticky='w')
     ##Init Image
     labelImg = tk.Label(window, image=None, bg='grey')
     labelImg.grid(row=0, column=1, sticky='nesw')

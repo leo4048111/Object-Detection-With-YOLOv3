@@ -35,7 +35,7 @@ path = train_parameters['freeze_dir']
 [inference_program, feed_target_names, fetch_targets] = fluid.io.load_inference_model(dirname=path, executor=exe)
 
 
-def draw_bbox_image(img, boxes, labels, save_name):
+def draw_bbox_image(img, boxes, labels, save_name, scores, isFilter):
     """
     给图片画上外接矩形框
     :param img:
@@ -47,15 +47,27 @@ def draw_bbox_image(img, boxes, labels, save_name):
     customColors = ['red', 'yellow', 'blue', 'green', 'black', 'brown']
 
     font = ImageFont.truetype('./Arial.ttf', 100)
+    font2 = ImageFont.truetype('./Arial.ttf', 60)
     img_width, img_height = img.size
     draw = ImageDraw.Draw(img)
-    for box, label in zip(boxes, labels):
+    for box, label, score in zip(boxes, labels, scores):
+        if isFilter:
+            if score < 0.05:
+                continue
+
         xmin, ymin, xmax, ymax = box[0], box[1], box[2], box[3]
-        draw.rectangle((xmin, ymin, xmax, ymax), None, customColors[int(label)], 10)
+        draw.rectangle((xmin, ymin, xmax, ymax),
+                       None,
+                       customColors[int(label)],
+                       10)
         draw.text((xmin, ymin),
                   label_dict[int(label)],
                   font=font,
                   fill=(255, 255, 0))
+        draw.text((xmin, ymax),
+                  str(score),
+                  font=font,
+                  fill=(int(score*255), int(score*255), int(score*255)))
     img.save(save_name)
     #display(img)
 
@@ -89,7 +101,7 @@ def read_image(img_path):
     return origin, img, resized_img
 
 
-def infer(image_path, output_path, openImg):
+def infer(image_path, output_path, openImg, isFilter):
     """
     预测，将结果保存到一副新的图片中
     :param image_path:
@@ -107,6 +119,7 @@ def infer(image_path, output_path, openImg):
                             return_numpy=False)
     period = time.time() - t1
     print("predict cost time:{0}".format("%2.2f sec" % period))
+
     bboxes = np.array(batch_outputs[0])
     # print(bboxes)
 
@@ -119,7 +132,7 @@ def infer(image_path, output_path, openImg):
 
     out_path = output_path
     out_path += '/' + os.path.splitext(os.path.basename(image_path))[0]+'-result.jpg'
-    draw_bbox_image(origin, boxes, labels, out_path)
+    draw_bbox_image(origin, boxes, labels, out_path, scores, isFilter)
     openImg(out_path)
 
 
