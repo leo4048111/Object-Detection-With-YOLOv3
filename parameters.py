@@ -13,9 +13,9 @@ train_parameters = {
     "model_prefix": "yolo-v3",
     "freeze_dir": "freeze_model",
     "use_tiny": False,          # 是否使用 裁剪 tiny 模型
-    "max_box_num": 8,          # 一幅图上最多有多少个目标
+    "max_box_num": 6,          # 一幅图上最多有多少个目标
     "num_epochs": 200,
-    "train_batch_size": 10,      # 对于完整 yolov3，每一批的训练样本不能太多，内存会炸掉；如果使用 tiny，可以适当大一些
+    "train_batch_size": 1,      # 对于完整 yolov3，每一批的训练样本不能太多，内存会炸掉；如果使用 tiny，可以适当大一些
     "use_gpu": True,
     "yolo_cfg": {
         "input_size": [3, 448, 448],    # 原版的边长大小为608，为了提高训练速度和预测速度，此处压缩为448

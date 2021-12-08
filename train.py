@@ -37,6 +37,8 @@ from paddle.fluid.param_attr import ParamAttr
 from paddle.fluid.regularizer import L2Decay
 from PIL import Image, ImageEnhance, ImageDraw
 
+Image.MAX_IMAGE_PIXELS = None
+
 os.chdir(os.path.abspath(os.path.dirname(sys.argv[0])))
 paddle.enable_static()
 logger = None
