@@ -101,6 +101,8 @@ def read_image(img_path):
     img = img[np.newaxis, :]
     return origin, img, resized_img
 
+total_time = 0
+
 def infer(image_path):
     origin, tensor_img, resized_img = read_image(image_path)
     input_w, input_h = origin.size[0], origin.size[1]
@@ -114,6 +116,8 @@ def infer(image_path):
                             return_numpy=False)
     period = time.time() - t1
     print("predict cost time:{0}".format("%2.2f sec" % period))
+    global total_time
+    total_time += period
     bboxes = np.array(batch_outputs[0])
     # print(bboxes)
 
@@ -139,8 +143,8 @@ def infer(image_path):
         for j in boxes[i]:
             predictTmp.append(j)
         predict.append(predictTmp)
-    #f = open("./input/detection-results/" + image_path[25:-4] + '.txt', 'w')   #original
-    f = open("./input/detection-results/" + image_path.split('/')[-1].split('.')[0] + '.txt', 'w')  #editted
+    tmp = image_path[25:-4]
+    f = open("./input/detection-results/" + image_path.split('/')[-1].split('.')[0] + '.txt', 'w')
     for i in predict:
         for j in i:
             f.write(str(j) + ' ')
@@ -169,19 +173,17 @@ if __name__ == '__main__':
                 continue
             bbox_sample = []
             object = json.loads(object_str)
-            #bbox_sample.append(float(train_parameters['label_dict'][object['value']]))    #original
-            bbox_sample.append(int(train_parameters['label_dict'][object['value']]))     #editted
+            bbox_sample.append(int(train_parameters['label_dict'][object['value']]))
             bbox = object['coordinate']
             bbox_sample.append(float(bbox[0][0]))
             bbox_sample.append(float(bbox[0][1]))
             bbox_sample.append(float(bbox[1][0]))
             bbox_sample.append(float(bbox[1][1]))
             bbox_labels.append(bbox_sample)
-
-        # f = open("./input/ground-truth/" + image_path[25:-4] + '.txt', 'w')   #original
-        f = open("./input/ground-truth/" + image_path.split('/')[-1].split('.')[0] + '.txt', 'w')  #editted
+        f = open("./input/ground-truth/" + image_path.split('/')[-1].split('.')[0] + '.txt', 'w')
         for i in bbox_labels:
             for j in i:
                 f.write(str(j) + ' ')
             f.write('\n')
         f.close()
+        print("Infer total time:{0}".format("%2.2f sec" % total_time))

@@ -6,19 +6,19 @@ train_parameters = {
     "label_dict": {},
     "num_dict": {},
     "image_count": -1,
-    "continue_train": True,     # 是否加载前一次的训练参数，接着训练
+    "continue_train": True,
     "pretrained": False,
     "pretrained_model_dir": "./pretrained-model",
     "save_model_dir": "./yolo-model",
     "model_prefix": "yolo-v3",
     "freeze_dir": "freeze_model",
-    "use_tiny": False,          # 是否使用 裁剪 tiny 模型
-    "max_box_num": 6,          # 一幅图上最多有多少个目标
-    "num_epochs": 200,
-    "train_batch_size": 1,      # 对于完整 yolov3，每一批的训练样本不能太多，内存会炸掉；如果使用 tiny，可以适当大一些
+    "use_tiny": False,
+    "max_box_num": 6,
+    "num_epochs": 30000,
+    "train_batch_size": 1,
     "use_gpu": True,
     "yolo_cfg": {
-        "input_size": [3, 448, 448],    # 原版的边长大小为608，为了提高训练速度和预测速度，此处压缩为448
+        "input_size": [3, 448, 448],
         "anchors": [7, 10, 12, 22, 24, 17, 22, 45, 46, 33, 43, 88, 85, 66, 115, 146, 275, 240],
         "anchor_mask": [[6, 7, 8], [3, 4, 5], [0, 1, 2]]
     },
@@ -65,10 +65,6 @@ import os
 import codecs
 
 def init_train_parameters():
-    """
-    初始化训练参数，主要是初始化图片数量，类别数
-    :return:
-    """
     file_list = os.path.join(train_parameters['data_dir'], train_parameters['train_list'])
     label_list = os.path.join(train_parameters['data_dir'], "label_list")
     index = 0

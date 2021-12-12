@@ -1,17 +1,7 @@
-"""
-需要修改的地方 ：
-1、你自己的类别 CLASSES
-2、数据集路劲 data_path
-3、第12行，生成文件的保存路径及名称
-"""
 import xml.etree.ElementTree as ET
 import os
 
-CLASSES = ['person', 'bird', 'cat', 'cow'
-           ,'dog','horse','sheep','aeroplane','bicycle'
-           ,'boat','bus','car','motorbike','train'
-           ,'bottle','chair','dining table','potted plant'
-           ,'sofa' , 'tv/monitor']
+CLASSES = ['Person', 'Bicycle', 'Car']
 
 def convert_xml_annotation(data_path, classes):
     xml_dir = []

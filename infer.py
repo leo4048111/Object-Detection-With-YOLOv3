@@ -31,7 +31,8 @@ class_dim = train_parameters['class_dim']
 print("label_dict:{} class dim:{}".format(label_dict, class_dim))
 place = fluid.CUDAPlace(0) if train_parameters['use_gpu'] else fluid.CPUPlace()
 exe = fluid.Executor(place)
-path = train_parameters['freeze_dir']
+#path = train_parameters['freeze_dir']
+path = 'freeze_model_2'
 [inference_program, feed_target_names, fetch_targets] = fluid.io.load_inference_model(dirname=path, executor=exe)
 
 
@@ -52,7 +53,7 @@ def draw_bbox_image(img, boxes, labels, save_name, scores, isFilter):
     draw = ImageDraw.Draw(img)
     for box, label, score in zip(boxes, labels, scores):
         if isFilter:
-            if score < 0.05:
+            if score < 0.15:
                 continue
 
         xmin, ymin, xmax, ymax = box[0], box[1], box[2], box[3]

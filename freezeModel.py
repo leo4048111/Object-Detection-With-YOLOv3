@@ -9,7 +9,6 @@ init_train_parameters()
 
 
 def freeze_model():
-
     exe = fluid.Executor(fluid.CPUPlace())
     ues_tiny = train_parameters['use_tiny']
     yolo_config = train_parameters['yolo_tiny_cfg'] if ues_tiny else train_parameters['yolo_cfg']

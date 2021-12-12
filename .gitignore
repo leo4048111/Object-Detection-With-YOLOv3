@@ -1,6 +1,7 @@
 yolo-model
 *.jpg
 pbcTest
-data
 input
+output
 infer_result
+freeze_model_2

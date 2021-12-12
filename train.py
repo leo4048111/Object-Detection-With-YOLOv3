@@ -823,7 +823,7 @@ def get_loss(model, outputs, gt_box, gt_label):
                 anchor_mask=model.get_anchor_mask()[i],
                 class_num=model.get_class_num(),
                 ignore_thresh=train_parameters['ignore_thresh'],
-                use_label_smooth=False,  # 对于类别不多的情况，设置为 False 会更合适一些，不然 score 会很小
+                use_label_smooth=False,  #Set to False for tiny label sets
                 downsample_ratio=downsample_ratio)
             losses.append(fluid.layers.reduce_mean(loss))
             downsample_ratio //= 2
